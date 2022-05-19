@@ -1,0 +1,18 @@
+
+prometheus:
+  url: http://prometheus-operated.default.svc
+  port: 9090
+  path: ""
+rules:
+  custom:
+    - seriesQuery: '{__name__="http_requests_total"}'
+      resources:
+        overrides:
+          target_namespace:
+            resource: 'namespace'
+          service:
+            resource: 'service'
+      name:
+        matches: ''
+        as: 'metric_app_http_requests_total'
+      metricsQuery: 'increase(http_requests_total{service="metric-app"}[3m])'
